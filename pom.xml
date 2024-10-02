@@ -57,6 +57,12 @@
       <artifactId>junit-vintage-engine</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+
 
     <!-- logging -->
     <dependency>
@@ -77,17 +83,12 @@
       <version>3.16.0</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>exec-maven-plugin</artifactId>
-      <version>3.4.1</version>
-    </dependency>
-
   </dependencies>
 
   <build>
 
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -123,7 +124,6 @@
               </transformers>
             </configuration>
           </execution>
-
         </executions>
       </plugin>
 
