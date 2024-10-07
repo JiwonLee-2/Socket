@@ -130,12 +130,12 @@ public class MessageClientForm {
     }
 
     private void configureRecvObserver(){
-        /*##3-3-1 server로 부터 message를 수신하면 MessageRecvObserver에 의해서 messageAction를 호출하여 UI(MessageClientForm)에 반영 합니다.
+        /*#3-3-1 server로 부터 message를 수신하면 MessageRecvObserver에 의해서 messageAction를 호출하여 UI(MessageClientForm)에 반영 합니다.
             - message를 수신한 Observer를 subject에 등록 하세요
             - EventType.RECV 입니다.
          */
-        MessageAction messageAction = MessageRecvObserver.;
-        Observer observer = null;
+        MessageAction messageAction = new RecvMessageAction(this);
+        Observer observer = new MessageRecvObserver(messageAction);
         subject.register(EventType.RECV, observer);
     }
 
@@ -143,8 +143,8 @@ public class MessageClientForm {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                //TODO#3-7 MessageClientForm를 생성 합니다.
-
+                //#3-7 MessageClientForm를 생성 합니다.
+                new MessageClientForm(subject);
             }
         });
     }
