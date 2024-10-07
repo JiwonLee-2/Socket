@@ -14,7 +14,7 @@ package com.nhnacademy.server.method.parser;
 
 public class MethodParser {
     public static MethodAndValue parse(String message){
-        String messages[] = message.split(" ");
+        String[] messages = message.split(" ");
         if(messages.length>0) {
             if (messages.length == 1) {
                 return new MethodAndValue(messages[0], "");

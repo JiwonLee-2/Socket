@@ -24,8 +24,8 @@ import java.util.Objects;
 
 @Slf4j
 public class MessageClient implements Runnable {
-    private final static String DEFAULT_SERVER_ADDRESS = "localhost";
-    private final static int DEFAULT_PORT = 8888;
+    private static final String DEFAULT_SERVER_ADDRESS = "localhost";
+    private static final int DEFAULT_PORT = 8888;
 
     private final String serverAddress;
     private final int serverPort;
