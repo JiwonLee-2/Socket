@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EchoResponse implements Response {
     // echo method에 해당되는 응답을 구현 합니다.
 
-    private final static String METHOD = "echo";
+    private static final String METHOD = "echo";
 
     @Override
     public String getMethod() {
@@ -38,15 +38,16 @@ public class EchoResponse implements Response {
         /*#1-6 value를 반환 합니다.
             - ex) echo hello message -> method = echo , value = hello 임으로 value를 반환 합니다.
         */
-        MethodParser.MethodAndValue result = MethodParser.parse(value);
-        if(result != null){
-            String method = result.getMethod();
-            String resultValue = result.getValue();
-            log.debug("method: {}, value: {}", method, resultValue);
-            return resultValue;
-        }
-        else {
-            throw new NoSuchElementException("입력값을 받지 못했습니다.");
-        }
+        // MethodParser.MethodAndValue result = MethodParser.parse(value);
+        // if(result != null){
+        //     String method = result.getMethod();
+        //     String resultValue = result.getValue();
+        //     log.debug("method: {}, value: {}", method, resultValue);
+        //     return resultValue;
+        // }
+        // else {
+        //     throw new NoSuchElementException("입력값을 받지 못했습니다.");
+        // }
+        return value;
     }
 }

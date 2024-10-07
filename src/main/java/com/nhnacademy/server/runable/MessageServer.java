@@ -14,6 +14,8 @@ package com.nhnacademy.server.runable;
 
 import com.nhnacademy.server.method.parser.MethodParser;
 import com.nhnacademy.server.method.response.Response;
+import com.nhnacademy.server.method.response.ResponseFactory;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -63,23 +65,23 @@ public class MessageServer implements Runnable {
 
                 while ((recvMessage = clientIn.readLine()) != null) {
                     System.out.println("[server]recv-message:" + recvMessage);
-                    //TODO#1-10 MethodParser를 이용해서 recvMessage를 파싱 합니다.
+                    //#1-10 MethodParser를 이용해서 recvMessage를 파싱 합니다.
 
-                    MethodParser.MethodAndValue methodAndValue = null;
+                    MethodParser.MethodAndValue methodAndValue = MethodParser.parse(recvMessage);
 
                     log.debug("method:{},value:{}",methodAndValue.getMethod(),methodAndValue.getValue());
 
-                    //TODO#1-11 ResponseFactory를 이용해서 methodAndValue.getMethod()에 해당되는 response를 얻습니다.
-                    Response response = null;
+                    //#1-11 ResponseFactory를 이용해서 methodAndValue.getMethod()에 해당되는 response를 얻습니다.
+                    Response response = ResponseFactory.getResponse(recvMessage);
 
 
                     String sendMessage;
                     if(Objects.nonNull(response)){
-                        //TODO#1-12 methodAndValue.getValue() 이용해서 response를 실행 합니다.
-                        sendMessage = null;
+                        //#1-12 methodAndValue.getValue() 이용해서 response를 실행 합니다.
+                        sendMessage = methodAndValue.getValue();
                     }else {
-                        //TODO#1-13 response가 null 이면 sendMessage를 "{echo} method not found" 로 설정 합니다.
-                        sendMessage="something";
+                        //#1-13 response가 null 이면 sendMessage를 "{echo} method not found" 로 설정 합니다.
+                        sendMessage="{echo} method not found";
                     }
                     out.println(sendMessage);
                     out.flush();
