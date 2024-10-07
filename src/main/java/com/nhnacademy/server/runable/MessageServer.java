@@ -15,7 +15,7 @@ package com.nhnacademy.server.runable;
 import com.nhnacademy.server.method.parser.MethodParser;
 import com.nhnacademy.server.method.response.Response;
 import com.nhnacademy.server.method.response.ResponseFactory;
-
+import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -65,23 +65,28 @@ public class MessageServer implements Runnable {
 
                 while ((recvMessage = clientIn.readLine()) != null) {
                     System.out.println("[server]recv-message:" + recvMessage);
-                    //#1-10 MethodParser를 이용해서 recvMessage를 파싱 합니다.
+                    //MethodParser를 이용해서 recvMessage를 파싱 합니다.
 
                     MethodParser.MethodAndValue methodAndValue = MethodParser.parse(recvMessage);
 
                     log.debug("method:{},value:{}",methodAndValue.getMethod(),methodAndValue.getValue());
 
-                    //#1-11 ResponseFactory를 이용해서 methodAndValue.getMethod()에 해당되는 response를 얻습니다.
-                    Response response = ResponseFactory.getResponse(recvMessage);
-
+                    //ResponseFactory를 이용해서 methodAndValue.getMethod()에 해당되는 response를 얻습니다.
+                    Response response = null;
+                    try {
+                        response = ResponseFactory.getResponse(methodAndValue.getMethod());
+                    }catch (ResponseNotFoundException re){
+                        //ResponseNotFoundException 발생하면 로그로 남김니다.
+                        log.debug("response not found : {}", re.getMessage());
+                    }
 
                     String sendMessage;
                     if(Objects.nonNull(response)){
-                        //#1-12 methodAndValue.getValue() 이용해서 response를 실행 합니다.
-                        sendMessage = methodAndValue.getValue();
+                        //methodAndValue.getValue() 이용해서 response를 실행 합니다.
+                        sendMessage = response.execute(methodAndValue.getValue());
                     }else {
-                        //#1-13 response가 null 이면 sendMessage를 "{echo} method not found" 로 설정 합니다.
-                        sendMessage="{echo} method not found";
+                        //response가 null 이면 sendMessage를 "{echo} method not found" 로 설정 합니다.
+                        sendMessage=String.format("{%s} method not found!",methodAndValue.getMethod());
                     }
                     out.println(sendMessage);
                     out.flush();

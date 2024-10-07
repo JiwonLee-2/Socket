@@ -24,8 +24,8 @@ import java.util.Objects;
 
 @Slf4j
 public class MessageClient implements Runnable {
-    private static final String DEFAULT_SERVER_ADDRESS = "localhost";
-    private static final int DEFAULT_PORT = 8888;
+    private final static String DEFAULT_SERVER_ADDRESS = "localhost";
+    private final static int DEFAULT_PORT = 8888;
 
     private final String serverAddress;
     private final int serverPort;
@@ -65,7 +65,7 @@ public class MessageClient implements Runnable {
 
             while ((userMessage = stdIn.readLine())!=null){
                 out.println(userMessage);
-                System.out.println(String.format("[client]recv-message:%s",clientIn.readLine()));
+                System.out.println(String.format("recv-message:%s",clientIn.readLine()));
                 System.out.print("send-message:");
             }
 

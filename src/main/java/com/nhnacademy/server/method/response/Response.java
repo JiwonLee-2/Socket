@@ -12,7 +12,6 @@
 
 package com.nhnacademy.server.method.response;
 
-
 public interface Response {
 
     String getMethod();
