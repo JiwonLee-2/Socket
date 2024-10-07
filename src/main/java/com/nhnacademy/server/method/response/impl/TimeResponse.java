@@ -13,13 +13,10 @@
 package com.nhnacademy.server.method.response.impl;
 
 import com.nhnacademy.server.method.response.Response;
-import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Objects;
 
 public class TimeResponse implements Response {
 

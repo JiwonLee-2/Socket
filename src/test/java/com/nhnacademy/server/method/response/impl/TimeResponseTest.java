@@ -19,12 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
-import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 class TimeResponseTest {
 
@@ -59,7 +55,7 @@ class TimeResponseTest {
     @Test
     @DisplayName("pattern : yyyy-MM-dd")
     void execute2() {
-        //TODO#7 execute1() 테스트를 기반으로 "yyyy-MM-dd" 검증하는 코드를 작성하세요
+        //#7 execute1() 테스트를 기반으로 "yyyy-MM-dd" 검증하는 코드를 작성하세요
         String pattern = "yyyy-MM-dd";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
         String actual = LocalDateTime.now().format(dateTimeFormatter);
