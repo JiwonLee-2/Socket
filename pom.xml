@@ -77,13 +77,6 @@
       <version>3.16.0</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>exec-maven-plugin</artifactId>
-      <version>3.4.1</version>
-    </dependency>
-
-
   </dependencies>
 
   <build>
@@ -92,8 +85,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.0</version>
         <executions>
-
           <execution>
             <id>server</id>
             <goals>
@@ -125,7 +118,6 @@
               </transformers>
             </configuration>
           </execution>
-
         </executions>
       </plugin>
 

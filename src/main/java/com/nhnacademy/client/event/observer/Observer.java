@@ -10,20 +10,14 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.server.method.response.impl;
+package com.nhnacademy.client.event.observer;
 
-import com.nhnacademy.server.method.response.Response;
+import com.nhnacademy.client.event.subject.EventType;
 
-public class EchoResponse implements Response {
-    private final static String METHOD = "echo";
-
-    @Override
-    public String getMethod() {
-        return METHOD;
-    }
-
-    @Override
-    public String execute(String value) {
-        return value;
+public interface Observer {
+    EventType getEventType();
+    void updateMessage(String message);
+    default boolean validate(EventType eventType){
+        return getEventType().equals(eventType);
     }
 }

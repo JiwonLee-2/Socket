@@ -10,20 +10,19 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.server.method.response.impl;
+package com.nhnacademy.client.event.subject;
 
-import com.nhnacademy.server.method.response.Response;
+public enum EventType {
+    SEND("송신"),
+    RECV("수신");
 
-public class EchoResponse implements Response {
-    private final static String METHOD = "echo";
+    private String value;
 
-    @Override
-    public String getMethod() {
-        return METHOD;
+    EventType(String value) {
+        this.value = value;
     }
 
-    @Override
-    public String execute(String value) {
+    public String getValue(){
         return value;
     }
 }

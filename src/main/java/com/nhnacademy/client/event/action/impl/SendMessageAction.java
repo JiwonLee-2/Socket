@@ -10,31 +10,28 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.server.method.response;
+package com.nhnacademy.client.event.action.impl;
 
-import com.nhnacademy.server.method.response.impl.EchoResponse;
-import com.nhnacademy.server.method.response.impl.TimeResponse;
-import lombok.extern.slf4j.Slf4j;
+import com.nhnacademy.client.event.action.MessageAction;
 
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Objects;
 
-@Slf4j
-public class ResponseFactory {
-    private static final ArrayList<Response> responseList = new ArrayList<>(){{
-        add(new EchoResponse());
-        add(new TimeResponse());
-    }};
+public class SendMessageAction implements MessageAction {
+    private final PrintWriter printWriter;
 
-    public static Response getResponse(String method){
-        Response response = responseList.stream()
-                .filter(o->o.validate(method))
-                .findFirst()
-                .orElse(null);
-
-        if(Objects.isNull(response)){
-            log.error("response not found : {}",method);
+    public SendMessageAction(PrintWriter printWriter) {
+        //#1-11 message 전송하기 위해서 printWriter를 사용 합니다. 초기화 해주세요
+        if(Objects.isNull(printWriter)){
+            throw new IllegalArgumentException();
         }
-        return response;
+        this.printWriter = printWriter;
+    }
+
+    @Override
+    public void execute(String message) {
+        //#1-12 printWriter를 이용해서 client ->  server로 message를 전송 합니다.
+        printWriter.println(message);
     }
 }

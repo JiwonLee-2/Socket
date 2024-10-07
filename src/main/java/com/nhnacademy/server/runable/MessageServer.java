@@ -53,7 +53,7 @@ public class MessageServer implements Runnable {
 
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()) {
+        while(true) {
             try(Socket client = serverSocket.accept();
                 BufferedReader clientIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter out = new PrintWriter(client.getOutputStream(),false);
@@ -61,17 +61,13 @@ public class MessageServer implements Runnable {
                 InetAddress inetAddress = client.getInetAddress();
                 log.debug("ip:{},port:{}", inetAddress.getAddress(), client.getPort());
 
-                String recvMessage = null;
+                String recvMessage;
 
                 while ((recvMessage = clientIn.readLine()) != null) {
-                    System.out.println("[server]recv-message:" + recvMessage);
-                    //MethodParser를 이용해서 recvMessage를 파싱 합니다.
+                    System.out.println("recv-message: " + recvMessage);
 
                     MethodParser.MethodAndValue methodAndValue = MethodParser.parse(recvMessage);
-
                     log.debug("method:{},value:{}",methodAndValue.getMethod(),methodAndValue.getValue());
-
-                    //ResponseFactory를 이용해서 methodAndValue.getMethod()에 해당되는 response를 얻습니다.
                     Response response = null;
                     try {
                         response = ResponseFactory.getResponse(methodAndValue.getMethod());
@@ -82,10 +78,8 @@ public class MessageServer implements Runnable {
 
                     String sendMessage;
                     if(Objects.nonNull(response)){
-                        //methodAndValue.getValue() 이용해서 response를 실행 합니다.
                         sendMessage = response.execute(methodAndValue.getValue());
                     }else {
-                        //response가 null 이면 sendMessage를 "{echo} method not found" 로 설정 합니다.
                         sendMessage=String.format("{%s} method not found!",methodAndValue.getMethod());
                     }
                     out.println(sendMessage);

@@ -10,20 +10,8 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.server.method.response.impl;
+package com.nhnacademy.client.event.action;
 
-import com.nhnacademy.server.method.response.Response;
-
-public class EchoResponse implements Response {
-    private final static String METHOD = "echo";
-
-    @Override
-    public String getMethod() {
-        return METHOD;
-    }
-
-    @Override
-    public String execute(String value) {
-        return value;
-    }
+public interface MessageAction {
+    void execute(String message);
 }
