@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 
 public class TimeResponse implements Response {
 
-    private static final String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private final static String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Override
     public String getMethod() {

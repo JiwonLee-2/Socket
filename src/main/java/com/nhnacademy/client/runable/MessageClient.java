@@ -22,15 +22,17 @@ import com.nhnacademy.client.ui.form.MessageClientForm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Objects;
 
 @Slf4j
 public class MessageClient implements Runnable {
-    private static final String DEFAULT_SERVER_ADDRESS = "localhost";
-    private static final int DEFAULT_PORT = 8888;
+    private final static String DEFAULT_SERVER_ADDRESS = "localhost";
+    private final static int DEFAULT_PORT = 8888;
 
     private final String serverAddress;
     private final int serverPort;

@@ -15,7 +15,7 @@ package com.nhnacademy.server.method.response.impl;
 import com.nhnacademy.server.method.response.Response;
 
 public class EchoResponse implements Response {
-    private static final String METHOD = "echo";
+    private final static String METHOD = "echo";
 
     @Override
     public String getMethod() {
