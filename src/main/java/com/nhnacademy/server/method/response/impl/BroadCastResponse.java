@@ -13,17 +13,37 @@
 package com.nhnacademy.server.method.response.impl;
 
 import com.nhnacademy.server.method.response.Response;
+import com.nhnacademy.server.runable.MessageServer;
+import com.nhnacademy.server.thread.channel.Session;
+import lombok.extern.slf4j.Slf4j;
 
-public class EchoResponse implements Response {
-    private final static String METHOD = "echo";
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.List;
 
+@Slf4j
+public class BroadCastResponse implements Response {
     @Override
     public String getMethod() {
-        return METHOD;
+        //TODO#1-1 method = "broadcast" 설정 합니다.
+        return "";
     }
 
     @Override
     public String execute(String value) {
-        return value;
+
+        /* TODO#1-2 MessageServer.getClientIds() 해당되는 모든 client에게 message를 전송 합니다.
+            - PrintWriter를  사용해서 각 client에게 응답 합니다.
+            - 응답시 sendCount가 증가 됩니다.
+            - value 값은 client에게 전송할 message 입니다.
+         */
+
+        List<String> ids = null;
+        int sendCount=0;
+
+        
+
+        return String.format("{%d}명에게 \"{%S}\"를 전송 했습니다.",sendCount,value);
     }
 }
