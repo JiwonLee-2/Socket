@@ -39,7 +39,7 @@ public class ResponseFactory {
         //#2-1 "com.nhnacademy.server" 페키지를 기준으로 class를 scan 합니다.
         Reflections reflections = new Reflections("com.nhnacademy.server");
         //#2-2 reflections로 부터 Response.class를 구현한 subType을 조회 합니다.
-        Set<Class<? extends Response>> classes = (Set<Class<? extends Response>>) reflections; //?: wildcard를 나타내며 어떤 타입이 올 수 있는지 정의하는 역할.
+        Set<Class<? extends Response>> classes = reflections.getSubTypesOf(Response.class); //?: wildcard를 나타내며 어떤 타입이 올 수 있는지 정의하는 역할.
         for (Class<? extends Response> clazz : classes) {
             try {
                 //#2-3 getDeclaredConstructor().newInstance() method를 호출해서 인스턴스를 생성 합니다.
