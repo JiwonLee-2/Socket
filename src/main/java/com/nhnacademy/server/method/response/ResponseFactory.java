@@ -25,8 +25,8 @@ public class ResponseFactory {
         add(new PortResponse());
         add(new TimeResponse());
         add(new LoginResponse());
-        //TODO#2-1 BroadCastResponse()를 추가하세요.
-
+        //#2-1 BroadCastResponse()를 추가하세요.
+        add(new BroadCastResponse());
     }};
 
     public static Response getResponse(String method){
