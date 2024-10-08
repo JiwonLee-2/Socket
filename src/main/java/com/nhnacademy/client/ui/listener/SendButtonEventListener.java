@@ -35,7 +35,7 @@ public class SendButtonEventListener implements ActionListener {
          */
         messageClientForm.getSubject().sendMessage(messageClientForm.getInputField().getText());
 
-        //TODO#3-4-3 messageClientForm.getInputField()의 text를 ""로 초기화 합니다.
+        //#3-4-3 messageClientForm.getInputField()의 text를 ""로 초기화 합니다.
         messageClientForm.getInputField().setText("");
     }
 }
