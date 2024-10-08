@@ -11,9 +11,6 @@
  */
 
 package com.nhnacademy.server.thread.channel;
-
-import org.apache.commons.lang3.StringUtils;
-
 import java.net.Socket;
 import java.util.Objects;
 

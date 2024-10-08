@@ -21,7 +21,7 @@ import java.util.Set;
 
 @Slf4j
 public class ResponseFactory {
-    /*TODO#2-5 responseList를 초기화 하는 step8 코드와 비교해보세요
+    /*#2-5 responseList를 초기화 하는 step8 코드와 비교해보세요
         - 아래와 같은 코드들이 생략되었음을 확인할 수 있습니다.
         - response 객체가 추가시 response 만 구현해 주면 됩니다.
         - 더이상 ResponseFactory 코드가 변경 되지 않습니다.
@@ -36,18 +36,17 @@ public class ResponseFactory {
     //[참고] https://www.baeldung.com/reflections-library
     
     static {
-        //TODO#2-1 "com.nhnacademy.server" 페키지를 기준으로 class를 scan 합니다.
-        Reflections reflections = new Reflections("do something");
-        //TODO#2-2 reflections로 부터 Response.class를 구현한 subType을 조회 합니다.
-        Set<Class<? extends Response>> classes = null;
-
+        //#2-1 "com.nhnacademy.server" 페키지를 기준으로 class를 scan 합니다.
+        Reflections reflections = new Reflections("com.nhnacademy.server");
+        //#2-2 reflections로 부터 Response.class를 구현한 subType을 조회 합니다.
+        Set<Class<? extends Response>> classes = (Set<Class<? extends Response>>) reflections; //?: wildcard를 나타내며 어떤 타입이 올 수 있는지 정의하는 역할.
         for (Class<? extends Response> clazz : classes) {
             try {
-                //TODO#2-3 getDeclaredConstructor().newInstance() method를 호출해서 인스턴스를 생성 합니다.
-                Response response = null;
+                //#2-3 getDeclaredConstructor().newInstance() method를 호출해서 인스턴스를 생성 합니다.
+                Response response = clazz.getDeclaredConstructor().newInstance();
                 log.debug("response-factory init :  instance :{}", response.getClass().getName() );
-                //TODO#2-4 생성된 response instance를 responseList에 추가 합니다.
-
+                //#2-4 생성된 response instance를 responseList에 추가 합니다.
+                    responseList.add(response);
             } catch (Exception e) {
                 e.printStackTrace();
             }
