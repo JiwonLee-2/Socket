@@ -30,17 +30,19 @@ public class MethodJob implements Executable {
     private final Socket client;
 
     public MethodJob(Socket client) {
-        //TODO#2-1 client null 이거나 closed 상태이면 IllegalArgumentException 발생 합니다.
-
-        this.client = null;
+        //T#2-1 client null 이거나 closed 상태이면 IllegalArgumentException 발생 합니다.
+        if(Objects.isNull(client) || client.isClosed()){
+            throw new IllegalArgumentException();
+        }
+        this.client = client;
     }
 
     @Override
     public void execute() {
-        //TODO#2-2 BufferedReader, PrintWriter 초기화 합니다.
+        //#2-2 BufferedReader, PrintWriter 초기화 합니다.
         try (
-             BufferedReader clientIn =null;
-             PrintWriter out = null;
+             BufferedReader clientIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
+             PrintWriter out = new PrintWriter(client.getOutputStream(), false);
         ) {
             InetAddress inetAddress = client.getInetAddress();
             log.debug("ip:{},port:{}", inetAddress.getAddress(), client.getPort());
@@ -49,16 +51,16 @@ public class MethodJob implements Executable {
 
             while ((recvMessage = clientIn.readLine()) != null) {
                 System.out.println("recv-message: " + recvMessage);
-                //TODO#2-3 client로 부터 전달된 message를 MethodParser를 이용해서 파싱 합니다.
-                MethodParser.MethodAndValue methodAndValue = null;
+                //#2-3 client로 부터 전달된 message를 MethodParser를 이용해서 파싱 합니다.
+                MethodParser.MethodAndValue methodAndValue = MethodParser.parse(recvMessage);
                 log.debug("method:{},value:{}", methodAndValue.getMethod(), methodAndValue.getValue());
-                //TODO#2-4 ResponseFactory를 이용해서 실행할 Response를 생성 합니다.
-                Response response = null;
+                //#2-4 ResponseFactory를 이용해서 실행할 Response를 생성 합니다.
+                Response response = ResponseFactory.getResponse(recvMessage);
 
-                //TODO#2-5 response 실행하고 결과를 client에게 응답 합니다.
+                //#2-5 response 실행하고 결과를 client에게 응답 합니다.
                 String sendMessage;
                 if (Objects.nonNull(response)) {
-                    sendMessage = null;
+                    sendMessage = response.execute(methodAndValue.getValue());
                 }else {
                     sendMessage = String.format("{%s} method not found!", methodAndValue.getMethod());
                 }
@@ -69,8 +71,15 @@ public class MethodJob implements Executable {
         } catch (Exception e) {
             log.debug("thread-error:{}",e.getMessage(),e);
         }finally {
-            //TODO#2-6 client socket이 null 아니면 client.close()를 호출 합니다.
-
+            //#2-6 client socket이 null 아니면 client.close()를 호출 합니다.
+            try {
+                if(Objects.nonNull(client)){
+                    client.close();
+                    log.debug("client is closed");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
