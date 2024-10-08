@@ -28,8 +28,7 @@ public class ResponseFactory {
         add(new EchoResponse());
         add(new PortResponse());
         add(new TimeResponse());
-        //TODO#5-1 LoginResponse() 추가
-
+        add(new LoginResponse());
     }};
 
     public static Response getResponse(String method){
