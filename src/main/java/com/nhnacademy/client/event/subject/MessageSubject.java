@@ -22,32 +22,25 @@ public class MessageSubject implements Subject {
     private final List<Observer> observers;
 
     public MessageSubject() {
-        //#1-1 Observer를 등록한 thread list를 생성 합니다. thread safety 해야 합니다.
         observers = Collections.synchronizedList(new ArrayList<>());
     }
 
     @Override
     public void register(EventType eventType, Observer observer) {
-        //T#1-2 observers에 observer를 등록 합니다.
         observers.add(observer);
     }
 
     @Override
     public void remove(EventType eventType, Observer observer) {
-        //#1-3 observers 에서 observer를 삭제 합니다.
-            observers.remove(observer);
+        observers.remove(observer);
     }
 
     @Override
     public void notifyObservers(EventType eventType, String message) {
-        /*
-            #1-4 모든 observer들에게  알림니다.
-           - method type을 고려해야 합니다. SEND,RECV, observer.validate()를 사용하여 검증 합니다.
-           - observer.updateMessage(message)를 호출 합니다.
-        */
         for(Observer observer : observers){
-            observer.validate(eventType);
-            observer.updateMessage(message);
+            if(observer.validate(eventType)){
+                observer.updateMessage(message);
+            }
         }
     }
 }

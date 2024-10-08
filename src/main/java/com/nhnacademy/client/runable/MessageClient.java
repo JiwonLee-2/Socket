@@ -29,8 +29,8 @@ import java.util.Objects;
 
 @Slf4j
 public class MessageClient implements Runnable {
-    private final static String DEFAULT_SERVER_ADDRESS = "localhost";
-    private final static int DEFAULT_PORT = 8888;
+    private static final String DEFAULT_SERVER_ADDRESS = "localhost";
+    private static final int DEFAULT_PORT = 8888;
 
     private final String serverAddress;
     private final int serverPort;
@@ -67,14 +67,9 @@ public class MessageClient implements Runnable {
     }
 
     private void startReceivedMessageClient(){
-        /*#2-6 receivedMessageClient를 이용해서 thread를 생성하고 시작 합니다.
-            - message를 수신하는 역할
-            - 즉 message의 수신과 송신을 비동기 적으로 처리하기 위함.
-            - 지금 까지는 client -> message를 server에 전송 server는 client에게 응답하는 방식. 즉 동기방식
-         */
         ReceivedMessageClient receivedMessageClient = new ReceivedMessageClient(clientSocket, subject);
         Thread thread = new Thread(receivedMessageClient);
-
+        thread.start();
     }
 
     @Override
@@ -82,10 +77,9 @@ public class MessageClient implements Runnable {
         try(
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(),true);
         ){
-            //#2-7 송신 관련해서 Observer를 설정 합니다. configSendObserver()를 호출하세요
             configSendObserver(out);
 
-            //#2-9 MessageClientForm는 message 송신과 수신을 담당하는 UI 역할을 합니다.  MessageClientForm.showUI()호출해서 UI를 rendering 합니다.
+            //ui 실행
             MessageClientForm.showUI(subject);
 
             while (!Thread.currentThread().isInterrupted()){
@@ -109,13 +103,9 @@ public class MessageClient implements Runnable {
     private void configSendObserver(PrintWriter printWriter){
         SendMessageAction sendMessageAction = null;
         try {
-            //sendMessageAction은 송신 event 발생시 MessageSendObserver Observer에 의해서 실제 송신을 당당하는 객체 입니다.
-
-            //#2-8 observer를 관리하는 subject에 observer를 등록 합니다. eventType : EventType.SEND
             sendMessageAction = new SendMessageAction(printWriter);
             Observer observer = new MessageSendObserver(sendMessageAction);
             subject.register(EventType.SEND,observer);
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

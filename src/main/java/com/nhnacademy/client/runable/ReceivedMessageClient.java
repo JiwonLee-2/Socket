@@ -28,41 +28,28 @@ public class ReceivedMessageClient implements Runnable {
     private final Subject subject;
 
     public ReceivedMessageClient(Socket socket, Subject subject) {
-        /*#2-1 message를 수신하는 Thread입니다.
-            - {socket , subject} is null 이면 IllegalArgumentException이 발생 합니다.
-         */
-        if(Objects.isNull(subject) || Objects.isNull(socket)){
+        if(Objects.isNull(socket) || Objects.isNull(subject)){
             throw new IllegalArgumentException();
         }
-
-        //#2-2 초기화 합니다.
         this.socket = socket;
         this.subject = subject;
     }
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()){
-
-            //#2-3 {inputStream, clientIn} 객체를 생성하세요
+        while (true){
             try(InputStream inputStream = socket.getInputStream();
                 BufferedReader clientIn = new BufferedReader(new InputStreamReader(inputStream));
             ){
-
                 String line;
-                //#2-4 clientIn.readLine() 호출해서 message를 읽습니다.
                 while((line = clientIn.readLine())!=null){
                     log.debug("recv-message:{}",line);
-
-                    //#2-5 line(message)를 observer들을 관리하는 subject의 receiveMessage()를 호출 합니다., 즉 message 수신 event가 등록되었습니다.
                     subject.receiveMessage(line);
-
                 }
             } catch (IOException e) {
                 log.error("receivedMessage Error:{}",e.getMessage(),e);
                 throw new RuntimeException(e);
             }
-
         }
     }
 

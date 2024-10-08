@@ -15,7 +15,6 @@ package com.nhnacademy.server.runable;
 import com.nhnacademy.server.method.parser.MethodParser;
 import com.nhnacademy.server.method.response.Response;
 import com.nhnacademy.server.method.response.ResponseFactory;
-import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -68,15 +67,9 @@ public class MessageServer implements Runnable {
 
                     MethodParser.MethodAndValue methodAndValue = MethodParser.parse(recvMessage);
                     log.debug("method:{},value:{}",methodAndValue.getMethod(),methodAndValue.getValue());
-                    Response response = null;
-                    try {
-                        response = ResponseFactory.getResponse(methodAndValue.getMethod());
-                    }catch (ResponseNotFoundException re){
-                        //ResponseNotFoundException 발생하면 로그로 남김니다.
-                        log.debug("response not found : {}", re.getMessage());
-                    }
-
+                    Response response = ResponseFactory.getResponse(methodAndValue.getMethod());
                     String sendMessage;
+
                     if(Objects.nonNull(response)){
                         sendMessage = response.execute(methodAndValue.getValue());
                     }else {
