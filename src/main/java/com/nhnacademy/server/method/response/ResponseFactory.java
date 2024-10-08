@@ -14,6 +14,7 @@ package com.nhnacademy.server.method.response;
 
 import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
 import com.nhnacademy.server.method.response.impl.EchoResponse;
+import com.nhnacademy.server.method.response.impl.LoginResponse;
 import com.nhnacademy.server.method.response.impl.PortResponse;
 import com.nhnacademy.server.method.response.impl.TimeResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +26,10 @@ import java.util.Objects;
 public class ResponseFactory {
     private static final ArrayList<Response> responseList = new ArrayList<>(){{
         add(new EchoResponse());
-        add(new TimeResponse());
-        ///2 PortResponse 생성 후 추가 합니다.
         add(new PortResponse());
+        add(new TimeResponse());
+        //TODO#5-1 LoginResponse() 추가
+
     }};
 
     public static Response getResponse(String method){

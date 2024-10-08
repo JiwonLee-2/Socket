@@ -12,25 +12,30 @@
 
 package com.nhnacademy.server.runable;
 
-import com.nhnacademy.server.method.parser.MethodParser;
-import com.nhnacademy.server.method.response.Response;
-import com.nhnacademy.server.method.response.ResponseFactory;
+import com.nhnacademy.server.thread.channel.MethodJob;
+import com.nhnacademy.server.thread.channel.RequestChannel;
+import com.nhnacademy.server.thread.pool.RequestHandler;
+import com.nhnacademy.server.thread.pool.WorkerThreadPool;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class MessageServer implements Runnable {
     private static final int DEFAULT_PORT=8888;
     private final int port;
     private final ServerSocket serverSocket;
+    private final WorkerThreadPool workerThreadPool;
+    private final RequestChannel requestChannel;
+
+    //TODO#1-1 - client Socket을 저장할 map 저장소를, ConcurrentHashMap을 이용해서 생성 합니다.
+    private static final Map<String,Socket> clientMap = null;
 
     public MessageServer(){
         this(DEFAULT_PORT);
@@ -48,39 +53,46 @@ public class MessageServer implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        requestChannel = new RequestChannel();
+        workerThreadPool = new WorkerThreadPool(new RequestHandler(requestChannel));
     }
 
     @Override
     public void run() {
+        //thread pool start
+        workerThreadPool.start();
+
         while(true) {
-            try(Socket client = serverSocket.accept();
-                BufferedReader clientIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                PrintWriter out = new PrintWriter(client.getOutputStream(),false);
-            ){
-                InetAddress inetAddress = client.getInetAddress();
-                log.debug("ip:{},port:{}", inetAddress.getAddress(), client.getPort());
-
-                String recvMessage;
-
-                while ((recvMessage = clientIn.readLine()) != null) {
-                    System.out.println("recv-message: " + recvMessage);
-
-                    MethodParser.MethodAndValue methodAndValue = MethodParser.parse(recvMessage);
-                    log.debug("method:{},value:{}",methodAndValue.getMethod(),methodAndValue.getValue());
-                    Response response = ResponseFactory.getResponse(methodAndValue.getMethod());
-                    String sendMessage;
-
-                    if(Objects.nonNull(response)){
-                        sendMessage = response.execute(methodAndValue.getValue());
-                    }else {
-                        sendMessage=String.format("{%s} method not found!",methodAndValue.getMethod());
-                    }
-                    out.println(sendMessage);
-                    out.flush();
-                }
+            try{
+                Socket client = serverSocket.accept();
+                requestChannel.addJob(new MethodJob(client));
             }catch (Exception e){
                 log.debug("{}",e.getMessage(),e);
             }
         }
     }//end method
+
+    public static boolean addClient(String id, Socket client){
+        //TODO#1-2, clientMap에 id가 이미 존재하면 로그를 출력하고, false를 반환 합니다.
+
+
+        //TODO#1-3 id, client(Socket)을 map에 등록 하고 true를 반환 합니다.
+        return false;
+    }
+
+    public static List<String> getClientIds(){
+        //TODO#1-4 clientMap의 key(id)를 List<String>으로 반환 합니다.
+        return null;
+    }
+
+    public static Socket getClientSocket(String id){
+        //TODO#1-5 id를 이용해서 Client Socket을 반환 합니다.
+        return null;
+    }
+
+    public static void removeClient(String id){
+        //TODO#1-6 id를 이용해서 clientMap에서 client Socket을 제거 합니다.
+
+    }
 }
