@@ -13,17 +13,22 @@
 package com.nhnacademy.server.method.response.impl;
 
 import com.nhnacademy.server.method.response.Response;
+import com.nhnacademy.server.thread.channel.Session;
 
-public class EchoResponse implements Response {
-    private final static String METHOD = "echo";
-
+public class WhoamiResponse implements Response {
     @Override
     public String getMethod() {
-        return METHOD;
+        //#1-1 method = "whoami" 설정 합니다.
+        return "whoami";
     }
 
     @Override
     public String execute(String value) {
-        return value;
+        //#1-2 로그인되어 있지 않다면 "login required!"  반환 합니다.
+        if(!Session.isLogin()){
+            return "login required!";
+        }
+        //#1-3 로그인 되어 있다면 my id is [marco] 형식으로 응답 합니다.
+        return String.format("my id is [%s]", Session.getCurrentId());
     }
 }

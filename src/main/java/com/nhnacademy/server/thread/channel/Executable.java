@@ -10,7 +10,8 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.server.util;
+package com.nhnacademy.server.thread.channel;
 
-public class MessageParser {
+public interface Executable {
+    void execute();
 }

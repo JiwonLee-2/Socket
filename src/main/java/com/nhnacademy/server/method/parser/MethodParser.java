@@ -12,6 +12,8 @@
 
 package com.nhnacademy.server.method.parser;
 
+import java.util.Arrays;
+
 public class MethodParser {
 
     public static MethodAndValue parse(String message){
@@ -20,7 +22,9 @@ public class MethodParser {
             if (messages.length == 1) {
                 return new MethodAndValue(messages[0], "");
             }
-            return new MethodAndValue(messages[0], messages[1]);
+            //TODO method parser 수정 /whisper marco hello
+            String value = message.substring(messages[0].length());
+            return new MethodAndValue(messages[0], value.trim());
         }
         return null;
     }
